@@ -4,6 +4,7 @@ namespace SpriteGenerator\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
@@ -19,15 +20,18 @@ class Configuration implements ConfigurationInterface
     {
         // TODO: how to set default values so that we wouldn't have to do it in all configs
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sprite_generator');
+        $treeBuilder = new TreeBuilder("sprite_generator", "array");
 
+        // Intelephense bullshit to make it less unhappy with the errors
+        /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
+        
         $rootNode
             ->children()
                 ->arrayNode('sprites')
                     ->useAttributeAsKey('name')
-                    ->prototype('array')
-                        ->children()
+                    ->prototype('array') // This returns an ArrayNodeDefinition
+                        ->children()     // So Intelephense is complaining about nothing here
                             ->scalarNode('inDir')->end()
                             ->scalarNode('outImage')->end()
                             ->scalarNode('outCss')->end()
@@ -46,8 +50,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

@@ -2,7 +2,9 @@
 
 namespace SpriteGenerator\CssFormatter;
 
-use Twig;
+use Twig\Loader\FilesystemLoader;
+use Twig\Extension\DebugExtension;
+use Twig\Environment;
 
 abstract class BaseFormatter
 {
@@ -25,12 +27,12 @@ abstract class BaseFormatter
      */
     public function formatTemplate(array $sourceImages, $spriteClass, $spriteImageName)
     {
-        $loader = new \Twig_Loader_Filesystem(dirname(__FILE__).'/../Resources/views');
-        $twig = new \Twig_Environment($loader, array(
+        $loader = new FilesystemLoader(dirname(__FILE__).'/../Resources/views');
+        $twig = new Environment($loader, array(
             'cache' => false,
             'debug' => true,
         ));
-        $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addExtension(new DebugExtension());
 
         $css = $twig->render($this->template,
             array(

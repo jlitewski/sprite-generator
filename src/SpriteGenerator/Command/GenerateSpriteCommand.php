@@ -1,14 +1,45 @@
 <?php
 namespace SpriteGenerator\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class GenerateSpriteCommand extends ContainerAwareCommand
+//class GenerateSpriteCommand extends ContainerAwareCommand
+class GenerateSpriteCommand extends Command implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface|null
+     */
+    private $container;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return ContainerInterface
+     *
+     * @throws \LogicException
+     */
+    protected function getContainer()
+    {
+        if(null === $this->container)
+        {
+            throw new \LogicException('The container cannot be retrieved as it was not yet set.');
+        }
+        
+        return $this->container;
+    }
+
     /**
      * configure
      *
@@ -41,6 +72,7 @@ class GenerateSpriteCommand extends ContainerAwareCommand
         try {
             $name = $input->getArgument('name');
             $output->writeln('<info>Generating your sprites</info>');
+
             $sprite = $this->getContainer()->get('nfq.sprite');
             $success = $sprite->generateSprite($name);
 
@@ -48,7 +80,7 @@ class GenerateSpriteCommand extends ContainerAwareCommand
                 $output->writeln('<info>Done</info>');
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
     }

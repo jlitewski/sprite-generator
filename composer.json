@@ -9,14 +9,21 @@
             "name": "Kazimieras Butkus",
             "email": "kazimieras@nfq.lt",
             "role": "Developer"
+        },
+        {
+            "name": "Jacob Litewski",
+            "email": "jacob.litewski@gmail.com",
+            "role": "Package Maintainer"
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=7.4.0",
         "ext-gd": "*",
-        "twig/twig": ">=1.0.0"
+        "twig/twig": "^3.0"
     },
     "require-dev": {
+        "phpunit/phpunit": "^9.5.0",
+        "symfony/symfony": "^4.4"
     },
     "autoload": {   
         "psr-0": { "SpriteGenerator": "src/" }
