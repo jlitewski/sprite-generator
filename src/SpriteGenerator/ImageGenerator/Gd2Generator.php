@@ -61,7 +61,7 @@ class Gd2Generator implements ImageGeneratorInterface
 
     /**
      * @param $image
-     * @return resource
+     * @return \GdImage resource
      * @throws \SpriteGenerator\Exception\SpriteException
      */
     private function createImageFromFile($image)
@@ -81,6 +81,11 @@ class Gd2Generator implements ImageGeneratorInterface
                 break;
             default:
                 throw new SpriteException('Image format "' . $format . '" (file "' . $file . '") is not supported.');
+        }
+
+        //Sanity check to make sure there isn't an error on image creation that the above methods didn't catch
+        if($tmp == false) {
+            throw new SpriteException("Image creation failed! (File '".$file."', Format '".$format."')");
         }
 
         return $tmp;

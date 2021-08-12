@@ -10,27 +10,27 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 //class GenerateSpriteCommand extends ContainerAwareCommand
-class GenerateSpriteCommand extends Command implements ContainerAwareInterface
+class GenerateSpriteCommand extends Command
 {
     /**
      * @var ContainerInterface|null
      */
     private $container;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
+    public function __construct(ContainerInterface $iContainer) {
+        $this->container = $iContainer;
+
+        parent::__construct();
     }
 
     /**
+     * Gets the container interface associated with this Command
+     * 
      * @return ContainerInterface
      *
      * @throws \LogicException
      */
-    protected function getContainer()
+    public function getContainer()
     {
         if(null === $this->container)
         {
